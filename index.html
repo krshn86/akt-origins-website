@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AKT-ORIGINS | Digital Product Passport</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400;1,600;1,700&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; font-size: 16px; }
+    body { background-color: #060D18; color: #fff; overflow-x: hidden; }
+    ::selection { background: rgba(229,185,78,.3); color: #0E2640; }
+    a { text-decoration: none; color: inherit; }
+    button { cursor: pointer; background: none; border: none; color: inherit; }
+    img { display: block; max-width: 100%; }
+    ul { list-style: none; }
+
+    .font-serif  { font-family: 'Cormorant Garamond', serif; }
+    .font-mono   { font-family: 'Space Mono', monospace; }
+    .font-grotesk{ font-family: 'Space Grotesk', sans-serif; }
+    .font-inter  { font-family: 'Inter', sans-serif; }
+    .gold   { color: #E5B94E; }
+    .navy   { color: #0E2640; }
+    .white  { color: #fff; }
+
+    .container { max-width: 1280px; margin: 0 auto; padding: 0 24px; }
+
+    .btn-cta {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: #E5B94E; color: #0E2640;
+      font-family: 'Space Mono', monospace; font-weight: 700; font-size: 11px;
+      letter-spacing: .2em; text-transform: uppercase; padding: 14px 28px;
+      clip-path: polygon(14px 0%, 100% 0%, calc(100% - 14px) 100%, 0% 100%);
+      border: none; cursor: pointer; transition: transform .3s, filter .3s;
+    }
+    .btn-cta:hover { transform: scale(1.04); filter: brightness(1.1); }
+
+    .btn-ghost {
+      display: inline-flex; align-items: center; gap: 8px;
+      border: 1px solid rgba(255,255,255,.15); color: rgba(255,255,255,.55);
+      font-family: 'Space Mono', monospace; font-size: 11px;
+      letter-spacing: .15em; text-transform: uppercase; padding: 14px 28px;
+      cursor: pointer; transition: color .3s, border-color .3s;
+    }
+    .btn-ghost:hover { color: #fff; border-color: rgba(255,255,255,.4); }
+
+    .eyebrow { display: flex; align-items: center; gap: 12px; margin-bottom: 28px; }
+    .eyebrow-line { height: 1px; width: 36px; background: #E5B94E; flex-shrink: 0; }
+    .eyebrow-line--dark { background: #0E2640; }
+    .eyebrow-text { font-family: 'Space Mono', monospace; font-size: 9px; letter-spacing: .35em; text-transform: uppercase; color: rgba(255,255,255,.5); }
+    .eyebrow-text--gold { color: #E5B94E; }
+    .eyebrow-text--dark { color: rgba(14,38,64,.6); }
+
+    @keyframes athenaTicker  { 0% { transform: translateX(0); } 100% { transform: translateX(-33.333%); } }
+    @keyframes marqueeLeft   { 0% { transform: translateX(0); } 100% { transform: translateX(-33.333%); } }
+    @keyframes marqueeRight  { 0% { transform: translateX(-33.333%); } 100% { transform: translateX(0); } }
+    @keyframes pulse-ring    { 0%,100% { transform: scale(1); opacity: .4; } 50% { transform: scale(1.04); opacity: .8; } }
+    @keyframes spin-cw       { to { transform: rotate(360deg); } }
+    @keyframes spin-ccw      { to { transform: rotate(-360deg); } }
+    @keyframes bounce-y      { 0%,100% { transform: translateY(0); } 50% { transform: translateY(7px); } }
+    @keyframes fade-pulse    { 0%,100% { opacity: 1; } 50% { opacity: .4; } }
+
+    .watermark {
+      position: absolute; font-family: 'Cormorant Garamond', serif; font-weight: 700;
+      font-size: clamp(8rem, 20vw, 18rem); line-height: 1; letter-spacing: -.05em;
+      pointer-events: none; user-select: none;
+    }
+    .fade-left  { position: absolute; inset-y: 0; left: 0;  width: 128px; pointer-events: none; z-index: 10; }
+    .fade-right { position: absolute; inset-y: 0; right: 0; width: 128px; pointer-events: none; z-index: 10; }
+    @media (max-width: 768px) { .lg-only { display: none !important; } }
+    @media (min-width: 769px) { .mobile-only { display: none !important; } }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════════ 1. NAVIGATION ═══════════════ -->
+<nav id="navbar" style="position:fixed;top:0;left:0;right:0;z-index:50;transition:background .5s,backdrop-filter .5s,border-color .5s;border-bottom:1px solid transparent;">
+  <div class="container" style="height:80px;display:flex;align-items:center;justify-content:space-between;">
+    <button onclick="window.scrollTo({top:0,behavior:'smooth'})" style="display:flex;align-items:center;gap:12px;">
+      <div style="width:44px;height:44px;border:1.5px solid rgba(255,255,255,.3);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+        <span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:13px;color:#E5B94E;">A</span>
+      </div>
+      <div style="line-height:1;">
+        <div style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:15px;letter-spacing:.3em;text-transform:uppercase;color:#fff;">AKT-ORIGINS</div>
+        <div style="font-family:'Space Mono',monospace;font-size:8px;letter-spacing:.25em;text-transform:uppercase;color:rgba(255,255,255,.35);">Digital Product Passport</div>
+      </div>
+    </button>
+    <div class="lg-only" style="display:flex;align-items:center;gap:40px;">
+      <button class="nav-link" onclick="scrollTo('#about')">About</button>
+      <button class="nav-link" onclick="scrollTo('#industries')">Industries</button>
+      <button class="nav-link" onclick="scrollTo('#team')">Team</button>
+      <button class="nav-link" onclick="scrollTo('#partners')">Partners</button>
+      <button class="nav-link" onclick="scrollTo('#contact')">Contact</button>
+      <button class="btn-cta" onclick="scrollTo('#contact')" style="font-size:10px;letter-spacing:.2em;padding:10px 22px;clip-path:polygon(10px 0%,100% 0%,calc(100% - 10px) 100%,0% 100%);">REQUEST DEMO</button>
+    </div>
+    <button id="hamburger" class="mobile-only" onclick="toggleMenu()" style="color:#fff;padding:4px;">
+      <svg id="icon-menu" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      <svg id="icon-close" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:none;"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+  </div>
+  <div id="mobile-menu" style="display:none;background:rgba(14,38,64,.99);border-top:1px solid rgba(255,255,255,.08);">
+    <button class="mobile-nav-link" onclick="scrollTo('#about');toggleMenu()">About</button>
+    <button class="mobile-nav-link" onclick="scrollTo('#industries');toggleMenu()">Industries</button>
+    <button class="mobile-nav-link" onclick="scrollTo('#team');toggleMenu()">Team</button>
+    <button class="mobile-nav-link" onclick="scrollTo('#partners');toggleMenu()">Partners</button>
+    <button class="mobile-nav-link" onclick="scrollTo('#contact');toggleMenu()">Contact</button>
+    <div style="padding:20px 24px;">
+      <button class="btn-cta" onclick="scrollTo('#contact');toggleMenu()" style="width:100%;justify-content:center;font-size:11px;">REQUEST DEMO</button>
+    </div>
+  </div>
+</nav>
+<style>
+  .nav-link { position:relative;font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.5);transition:color .3s;padding-bottom:2px; }
+  .nav-link::after { content:'';position:absolute;bottom:-2px;left:0;width:0;height:1px;background:#E5B94E;transition:width .4s; }
+  .nav-link:hover { color:#fff; }
+  .nav-link:hover::after { width:100%; }
+  .mobile-nav-link { display:block;width:100%;text-align:left;padding:18px 24px;font-family:'Space Mono',monospace;font-size:12px;letter-spacing:.25em;text-transform:uppercase;color:rgba(255,255,255,.5);border-bottom:1px solid rgba(255,255,255,.05);transition:color .3s; }
+  .mobile-nav-link:hover { color:#fff; }
+</style>
+
+<!-- ═══════════════ 2. HERO ═══════════════ -->
+<section id="hero" style="position:relative;min-height:100vh;display:flex;flex-direction:column;overflow:hidden;background-color:#0E2640;">
+  <div style="position:absolute;inset:0;">
+    <img src="https://images.unsplash.com/photo-1509316785289-025f5b846b35?w=1600&q=80" alt="" aria-hidden="true" style="width:100%;height:100%;object-fit:cover;object-position:center;opacity:.22;filter:grayscale(20%) contrast(1.1);" />
+    <div style="position:absolute;inset:0;background:linear-gradient(105deg,rgba(14,38,64,.96) 35%,rgba(14,38,64,.70) 70%,rgba(14,38,64,.50) 100%);"></div>
+    <div style="position:absolute;bottom:0;left:0;right:0;height:256px;background:linear-gradient(to bottom,transparent,#0E2640);"></div>
+  </div>
+  <div style="position:absolute;inset:0;pointer-events:none;opacity:.03;">
+    <svg width="100%" height="100%"><defs><pattern id="hg" width="70" height="70" patternUnits="userSpaceOnUse"><path d="M 70 0 L 0 0 0 70" fill="none" stroke="white" stroke-width="0.6"/></pattern></defs><rect width="100%" height="100%" fill="url(#hg)"/></svg>
+  </div>
+  <div style="position:relative;flex:1;display:flex;align-items:center;">
+    <div class="container" style="padding-top:112px;padding-bottom:32px;width:100%;">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center;">
+        <div>
+          <div class="eyebrow"><span class="eyebrow-line"></span><span class="eyebrow-text eyebrow-text--gold">EU Digital Product Passport Platform</span></div>
+          <h1 style="font-family:'Cormorant Garamond',serif;font-weight:300;font-size:clamp(3.8rem,8.5vw,7.5rem);line-height:.93;letter-spacing:-.02em;color:#fff;margin-bottom:32px;">
+            Every<br/>
+            <em style="font-style:italic;font-weight:600;">Product</em><br/>
+            Deserves<br/>
+            <span style="font-weight:700;font-style:italic;-webkit-text-stroke:1.5px #E5B94E;color:transparent;">Its Story.</span>
+          </h1>
+          <p style="font-family:'Inter',sans-serif;font-weight:300;font-size:18px;line-height:1.7;color:rgba(255,255,255,.45);max-width:420px;margin-bottom:40px;">Every product has a story. We make sure that story is real, verifiable, and visible — to the brands that make them, the people who buy them, and the world they move through.</p>
+          <div style="display:flex;flex-wrap:wrap;align-items:center;gap:16px;margin-bottom:56px;">
+            <button class="btn-cta" onclick="scrollTo('#about')">EXPLORE PLATFORM</button>
+            <button class="btn-ghost" onclick="scrollTo('#contact')">TALK TO US →</button>
+          </div>
+          <div style="display:flex;align-items:stretch;gap:32px;border-left:2px solid #E5B94E;padding-left:24px;">
+            <div>
+              <div style="font-family:'Space Mono',monospace;font-weight:700;font-size:1.8rem;color:#fff;">14,623+</div>
+              <div style="font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.25em;text-transform:uppercase;color:rgba(255,255,255,.3);margin-top:4px;">Passports Issued</div>
+            </div>
+            <div style="width:1px;background:rgba(255,255,255,.1);"></div>
+            <div>
+              <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+                <div style="width:6px;height:6px;border-radius:50%;background:#4ade80;animation:fade-pulse 2s infinite;"></div>
+                <span style="font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:#4ade80;">LIVE</span>
+              </div>
+              <div style="font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.1em;color:rgba(255,255,255,.3);">Real-time verification</div>
+            </div>
+            <div style="width:1px;background:rgba(255,255,255,.1);"></div>
+            <div>
+              <div style="font-family:'Space Mono',monospace;font-weight:700;font-size:1.8rem;color:#fff;">EU27</div>
+              <div style="font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.25em;text-transform:uppercase;color:rgba(255,255,255,.3);margin-top:4px;">Markets Covered</div>
+            </div>
+          </div>
+        </div>
+        <div class="lg-only" style="display:flex;align-items:center;justify-content:center;position:relative;height:580px;">
+          <div style="position:absolute;width:440px;height:440px;border-radius:50%;border:1px solid rgba(229,185,78,.08);animation:pulse-ring 5s ease-in-out infinite;"></div>
+          <div style="position:absolute;width:380px;height:380px;border-radius:50%;border:1px solid rgba(229,185,78,.12);animation:spin-cw 25s linear infinite;"></div>
+          <div style="position:absolute;width:300px;height:300px;border-radius:50%;border:1px solid rgba(255,255,255,.05);animation:spin-ccw 18s linear infinite;"></div>
+          <div style="position:absolute;width:320px;height:320px;border-radius:50%;background:radial-gradient(circle,rgba(229,185,78,.09) 0%,transparent 70%);"></div>
+          <div style="position:absolute;width:420px;height:420px;">
+            <span style="position:absolute;left:97%;top:50%;transform:translate(-50%,-50%);font-size:10px;color:rgba(229,185,78,.3);">★</span>
+            <span style="position:absolute;left:88.7%;top:73.5%;transform:translate(-50%,-50%);font-size:10px;color:rgba(229,185,78,.3);">★</span>
+            <span style="position:absolute;left:73.5%;top:88.7%;transform:translate(-50%,-50%);font-size:10px;color:rgba(229,185,78,.3);">★</span>
+            <span style="position:absolute;left:50%;top:97%;transform:translate(-50%,-50%);font-size:10px;color:rgba(229,185,78,.3);">★</span>
+            <span style="position:absolute;left:26.5%;top:88.7%;transform:translate(-50%,-50%);font-size:10px;color:rgba(229,185,78,.3);">★</span>
+            <span style="position:absolute;left:11.3%;top:73.5%;transform:translate(-50%,-50%);font-size:10px;color:rgba(229,185,78,.3);">★</span>
+            <span style="position:absolute;left:3%;top:50%;transform:translate(-50%,-50%);font-size:10px;color:rgba(229,185,78,.3);">★</span>
+            <span style="position:absolute;left:11.3%;top:26.5%;transform:translate(-50%,-50%);font-size:10px;color:rgba(229,185,78,.3);">★</span>
+            <span style="position:absolute;left:26.5%;top:11.3%;transform:translate(-50%,-50%);font-size:10px;color:rgba(229,185,78,.3);">★</span>
+            <span style="position:absolute;left:50%;top:3%;transform:translate(-50%,-50%);font-size:10px;color:rgba(229,185,78,.3);">★</span>
+            <span style="position:absolute;left:73.5%;top:11.3%;transform:translate(-50%,-50%);font-size:10px;color:rgba(229,185,78,.3);">★</span>
+            <span style="position:absolute;left:88.7%;top:26.5%;transform:translate(-50%,-50%);font-size:10px;color:rgba(229,185,78,.3);">★</span>
+          </div>
+          <div style="position:relative;width:220px;height:220px;border-radius:50%;border:2px solid rgba(229,185,78,.25);display:flex;align-items:center;justify-content:center;filter:drop-shadow(0 0 40px rgba(229,185,78,.15));">
+            <span style="font-family:'Cormorant Garamond',serif;font-weight:700;font-size:4rem;color:#E5B94E;letter-spacing:-.02em;">A</span>
+          </div>
+          <div style="position:absolute;top:40px;right:16px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.04);backdrop-filter:blur(12px);padding:12px 16px;border-radius:2px;">
+            <div style="font-family:'Space Mono',monospace;font-size:8px;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.3);margin-bottom:6px;">Compliance</div>
+            <div style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:13px;color:#E5B94E;">EU 2024/1781 ✓</div>
+          </div>
+          <div style="position:absolute;top:50%;right:-8px;transform:translateY(-50%);border:1px solid rgba(229,185,78,.2);background:rgba(229,185,78,.06);backdrop-filter:blur(12px);padding:12px 16px;border-radius:2px;">
+            <div style="font-family:'Space Mono',monospace;font-size:8px;letter-spacing:.2em;text-transform:uppercase;color:rgba(229,185,78,.5);margin-bottom:6px;">Origin</div>
+            <div style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:13px;color:#E5B94E;">★ Made in EU</div>
+          </div>
+          <div style="position:absolute;bottom:80px;left:8px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.04);backdrop-filter:blur(12px);padding:12px 16px;border-radius:2px;">
+            <div style="font-family:'Space Mono',monospace;font-size:8px;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.3);margin-bottom:6px;">Sectors</div>
+            <div style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:13px;color:#fff;">8 EU Industries</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div style="position:relative;overflow:hidden;padding:14px 0;border-top:1px solid rgba(255,255,255,.08);background:rgba(229,185,78,.07);">
+    <div style="display:flex;white-space:nowrap;width:max-content;animation:athenaTicker 35s linear infinite;">
+      <span style="font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.35em;text-transform:uppercase;color:rgba(229,185,78,.5);padding:0 32px;">DIGITAL PRODUCT PASSPORT<span style="margin-left:32px;color:rgba(229,185,78,.2);">◆</span></span>
+      <span style="font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.35em;text-transform:uppercase;color:rgba(229,185,78,.5);padding:0 32px;">BRAND PROTECTION<span style="margin-left:32px;color:rgba(229,185,78,.2);">◆</span></span>
+      <span style="font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.35em;text-transform:uppercase;color:rgba(229,185,78,.5);padding:0 32px;">AUTHENTICITY VERIFIED<span style="margin-left:32px;color:rgba(229,185,78,.2);">◆</span></span>
+      <span style="font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.35em;text-transform:uppercase;color:rgba(229,185,78,.5);padding:0 32px;">CONSUMER TRANSPARENCY<span style="margin-left:32px;color:rgba(229,185,78,.2);">◆</span></span>
+      <span style="font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.35em;text-transform:uppercase;color:rgba(229,185,78,.5);padding:0 32px;">ANTI-COUNTERFEITING<span style="margin-left:32px;color:rgba(229,185,78,.2);">◆</span></span>
+      <span style="font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.35em;text-transform:uppercase;color:rgba(229,185,78,.5);padding:0 32px;">PRODUCT TRACEABILITY<span style="margin-left:32px;color:rgba(229,185,78,.2);">◆</span></span>
+      <span style="font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.35em;text-transform:uppercase;color:rgba(229,185,78,.5);padding:0 32px;">EU MARKET READY<span style="margin-left:32px;color:rgba(229,185,78,.2);">◆</span></span>
+      <span style="font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.35em;text-transform:uppercase;color:rgba(229,185,78,.5);padding:0 32px;">REAL-TIME VERIFICATION<span style="margin-left:32px;color:rgba(229,185,78,.2);">◆</span></span>
+      <span style="font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.35em;text-transform:uppercase;color:rgba(229,185,78,.5);padding:0 32px;">TRUSTED IDENTITY<span style="margin-left:32px;color:rgba(229,185,78,.2);">◆</span></span>
+      <span style="font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.35em;text-transform:uppercase;color:rgba(229,185,78,.5);padding:0 32px;">DIGITAL PRODUCT PASSPORT<span style="margin-left:32px;color:rgba(229,185,78,.2);">◆</span></span>
+      <span style="font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.35em;text-transform:uppercase;color:rgba(229,185,78,.5);padding:0 32px;">BRAND PROTECTION<span style="margin-left:32px;color:rgba(229,185,78,.2);">◆</span></span>
+      <span style="font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.35em;text-transform:uppercase;color:rgba(229,185,78,.5);padding:0 32px;">AUTHENTICITY VERIFIED<span style="margin-left:32px;color:rgba(229,185,78,.2);">◆</span></span>
+      <span style="font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.35em;text-transform:uppercase;color:rgba(229,185,78,.5);padding:0 32px;">CONSUMER TRANSPARENCY<span style="margin-left:32px;color:rgba(229,185,78,.2);">◆</span></span>
+      <span style="font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.35em;text-transform:uppercase;color:rgba(229,185,78,.5);padding:0 32px;">ANTI-COUNTERFEITING<span style="margin-left:32px;color:rgba(229,185,78,.2);">◆</span></span>
+      <span style="font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.35em;text-transform:uppercase;color:rgba(229,185,78,.5);padding:0 32px;">PRODUCT TRACEABILITY<span style="margin-left:32px;color:rgba(229,185,78,.2);">◆</span></span>
+      <span style="font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.35em;text-transform:uppercase;color:rgba(229,185,78,.5);padding:0 32px;">EU MARKET READY<span style="margin-left:32px;color:rgba(229,185,78,.2);">◆</span></span>
+      <span style="font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.35em;text-transform:uppercase;color:rgba(229,185,78,.5);padding:0 32px;">REAL-TIME VERIFICATION<span style="margin-left:32px;color:rgba(229,185,78,.2);">◆</span></span>
+      <span style="font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.35em;text-transform:uppercase;color:rgba(229,185,78,.5);padding:0 32px;">TRUSTED IDENTITY<span style="margin-left:32px;color:rgba(229,185,78,.2);">◆</span></span>
+      <span style="font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.35em;text-transform:uppercase;color:rgba(229,185,78,.5);padding:0 32px;">DIGITAL PRODUCT PASSPORT<span style="margin-left:32px;color:rgba(229,185,78,.2);">◆</span></span>
+    </div>
+  </div>
+  <div style="position:relative;display:flex;justify-content:center;padding:28px 0;">
+    <button onclick="scrollTo('#about')" style="display:flex;flex-direction:column;align-items:center;gap:8px;color:rgba(255,255,255,.2);font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.4em;text-transform:uppercase;animation:bounce-y 2.2s ease-in-out infinite;">SCROLL<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></button>
+  </div>
+</section>
+
+<!-- ═══════════════ 3. ABOUT ═══════════════ -->
+<section id="about" style="position:relative;overflow:hidden;background-color:#D9D9D9;">
+  <div class="watermark" style="top:-32px;left:0;color:rgba(14,38,64,.04);">01</div>
+  <div class="container" style="padding-top:112px;padding-bottom:112px;">
+    <div style="display:grid;grid-template-columns:1fr 2fr;gap:64px;margin-bottom:80px;align-items:start;">
+      <div>
+        <div class="eyebrow"><span class="eyebrow-line eyebrow-line--dark"></span><span class="eyebrow-text eyebrow-text--dark">About Us</span></div>
+        <div style="width:192px;height:192px;background:radial-gradient(circle,rgba(14,38,64,.06) 0%,transparent 70%);border-radius:50%;display:flex;align-items:center;justify-content:center;">
+          <span style="font-family:'Cormorant Garamond',serif;font-weight:700;font-size:5rem;color:rgba(14,38,64,.7);">A</span>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;justify-content:center;">
+        <blockquote style="font-family:'Cormorant Garamond',serif;font-weight:300;font-size:clamp(2rem,4.5vw,3.6rem);line-height:1.1;letter-spacing:-.02em;color:#0E2640;margin-bottom:40px;">"We believe people deserve to know the truth about what they buy. <em style="font-style:italic;font-weight:600;">And brands deserve to prove it.</em>"</blockquote>
+        <p style="font-family:'Inter',sans-serif;font-weight:300;font-size:18px;line-height:1.75;color:rgba(14,38,64,.6);max-width:640px;">AKT-ORIGINS builds Digital Product Passports for any product that touches the EU market. It doesn't matter where a product is made. If it's sold, imported, or traded within the EU, it needs a verified digital identity. We create that identity, helping brands protect themselves from counterfeits, helping regulators do their job, and helping everyday consumers know exactly what they're buying.</p>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:32px;margin-bottom:96px;">
+      <div style="border-left:2px solid rgba(14,38,64,.2);padding-left:20px;"><div style="font-family:'Cormorant Garamond',serif;font-weight:700;font-size:clamp(2rem,4vw,2.8rem);color:#0E2640;line-height:1;margin-bottom:4px;">2026</div><div style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:#0E2640;margin-bottom:2px;">EU Mandate</div><div style="font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:rgba(14,38,64,.4);">Regulatory Deadline</div></div>
+      <div style="border-left:2px solid rgba(14,38,64,.2);padding-left:20px;"><div style="font-family:'Cormorant Garamond',serif;font-weight:700;font-size:clamp(2rem,4vw,2.8rem);color:#0E2640;line-height:1;margin-bottom:4px;">27</div><div style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:#0E2640;margin-bottom:2px;">EU Markets</div><div style="font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:rgba(14,38,64,.4);">Full Coverage</div></div>
+      <div style="border-left:2px solid rgba(14,38,64,.2);padding-left:20px;"><div style="font-family:'Cormorant Garamond',serif;font-weight:700;font-size:clamp(2rem,4vw,2.8rem);color:#0E2640;line-height:1;margin-bottom:4px;">99.8%</div><div style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:#0E2640;margin-bottom:2px;">Uptime SLA</div><div style="font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:rgba(14,38,64,.4);">Enterprise Grade</div></div>
+      <div style="border-left:2px solid rgba(14,38,64,.2);padding-left:20px;"><div style="font-family:'Cormorant Garamond',serif;font-weight:700;font-size:clamp(2rem,4vw,2.8rem);color:#0E2640;line-height:1;margin-bottom:4px;">8</div><div style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:#0E2640;margin-bottom:2px;">Industries</div><div style="font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:rgba(14,38,64,.4);">Verticals Served</div></div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:48px;margin-bottom:80px;">
+      <div class="pillar-card"><div style="font-family:'Cormorant Garamond',serif;font-weight:700;font-size:4rem;line-height:1;color:rgba(14,38,64,.12);margin-bottom:16px;">01</div><div style="width:32px;height:2px;background:#E5B94E;margin-bottom:20px;transition:width .5s;" class="pillar-bar"></div><h3 style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:18px;color:#0E2640;margin-bottom:12px;">A Passport for Every Product</h3><p style="font-family:'Inter',sans-serif;font-weight:300;font-size:17px;line-height:1.7;color:rgba(14,38,64,.55);">Any product entering or leaving the EU will need a Digital Product Passport. We build that passport — a verified digital identity that travels with the product through its entire life.</p></div>
+      <div class="pillar-card"><div style="font-family:'Cormorant Garamond',serif;font-weight:700;font-size:4rem;line-height:1;color:rgba(14,38,64,.12);margin-bottom:16px;">02</div><div style="width:32px;height:2px;background:#E5B94E;margin-bottom:20px;transition:width .5s;" class="pillar-bar"></div><h3 style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:18px;color:#0E2640;margin-bottom:12px;">Brand Protection Built In</h3><p style="font-family:'Inter',sans-serif;font-weight:300;font-size:17px;line-height:1.7;color:rgba(14,38,64,.55);">Counterfeits damage brands and mislead customers. Our passports make it easy to prove what's real and what's not — giving brands a practical tool to protect what they've built.</p></div>
+      <div class="pillar-card"><div style="font-family:'Cormorant Garamond',serif;font-weight:700;font-size:4rem;line-height:1;color:rgba(14,38,64,.12);margin-bottom:16px;">03</div><div style="width:32px;height:2px;background:#E5B94E;margin-bottom:20px;transition:width .5s;" class="pillar-bar"></div><h3 style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:18px;color:#0E2640;margin-bottom:12px;">Transparency for Consumers</h3><p style="font-family:'Inter',sans-serif;font-weight:300;font-size:17px;line-height:1.7;color:rgba(14,38,64,.55);">People deserve to know what they're buying: where it came from, what it's made of, and whether it's genuine. We put that information directly in their hands.</p></div>
+    </div>
+    <div style="display:flex;align-items:center;gap:16px;"><div style="height:1px;flex:1;background:rgba(14,38,64,.1);"></div><div style="display:inline-flex;align-items:center;gap:12px;padding:12px 24px;border:1px solid rgba(14,38,64,.15);border-radius:2px;"><div style="display:flex;gap:4px;"><span style="font-size:10px;color:#E5B94E;">★</span><span style="font-size:10px;color:#E5B94E;">★</span><span style="font-size:10px;color:#E5B94E;">★</span><span style="font-size:10px;color:#E5B94E;">★</span><span style="font-size:10px;color:#E5B94E;">★</span><span style="font-size:10px;color:#E5B94E;">★</span></div><span style="font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.35em;text-transform:uppercase;color:rgba(14,38,64,.5);">Proudly Made in EU</span></div><div style="height:1px;flex:1;background:rgba(14,38,64,.1);"></div></div>
+  </div>
+</section>
+<style>.pillar-card:hover .pillar-bar { width:56px; }</style>
+
+<!-- ═══════════════ 4. INDUSTRIES ═══════════════ -->
+<section id="industries" style="position:relative;overflow:hidden;background-color:#0E2640;">
+  <div class="watermark" style="top:-16px;right:0;color:rgba(255,255,255,.025);">02</div>
+  <div style="position:absolute;inset:0;pointer-events:none;opacity:.025;"><svg width="100%" height="100%"><defs><pattern id="ig" width="70" height="70" patternUnits="userSpaceOnUse"><path d="M 70 0 L 0 0 0 70" fill="none" stroke="white" stroke-width="0.5"/></pattern></defs><rect width="100%" height="100%" fill="url(#ig)"/></svg></div>
+  <div class="container" style="padding-top:112px;padding-bottom:112px;">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:64px;margin-bottom:80px;align-items:end;">
+      <div>
+        <div class="eyebrow"><span class="eyebrow-line"></span><span class="eyebrow-text eyebrow-text--gold">Industries</span></div>
+        <h2 style="font-family:'Cormorant Garamond',serif;font-weight:300;font-size:clamp(2.5rem,5.5vw,4.5rem);line-height:1.0;letter-spacing:-.02em;color:#fff;">Sectors We<br/><em style="font-style:italic;font-weight:600;">Serve</em></h2>
+      </div>
+      <p style="font-family:'Inter',sans-serif;font-weight:300;font-size:18px;line-height:1.75;color:rgba(255,255,255,.4);">We work across eight product sectors. Each one has its own supply chains, risks, and regulations — and in each one a Digital Product Passport changes what brands can prove and what consumers can trust.</p>
+    </div>
+    <div style="display:grid;grid-template-columns:2fr 3fr;min-height:480px;">
+      <div style="border-top:1px solid rgba(255,255,255,.08);" id="industry-list">
+        <button class="ind-btn active-ind" data-id="0" onclick="setIndustry(0)" style="--accent:#C084FC;"><div style="display:flex;align-items:center;gap:16px;"><span class="ind-num" style="color:rgba(255,255,255,.2);">01</span><span class="ind-name">Textiles &amp; Fashion</span></div><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="ind-arrow" style="opacity:0;transform:scale(0.5);transition:all .3s;"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg></button>
+        <button class="ind-btn" data-id="1" onclick="setIndustry(1)" style="--accent:#00A8CC;"><div style="display:flex;align-items:center;gap:16px;"><span class="ind-num" style="color:rgba(255,255,255,.2);">02</span><span class="ind-name">Electronics</span></div><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="ind-arrow" style="opacity:0;transform:scale(0.5);transition:all .3s;"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg></button>
+        <button class="ind-btn" data-id="2" onclick="setIndustry(2)" style="--accent:#FB923C;"><div style="display:flex;align-items:center;gap:16px;"><span class="ind-num" style="color:rgba(255,255,255,.2);">03</span><span class="ind-name">Construction</span></div><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="ind-arrow" style="opacity:0;transform:scale(0.5);transition:all .3s;"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg></button>
+        <button class="ind-btn" data-id="3" onclick="setIndustry(3)" style="--accent:#F472B6;"><div style="display:flex;align-items:center;gap:16px;"><span class="ind-num" style="color:rgba(255,255,255,.2);">04</span><span class="ind-name">Chemicals &amp; Materials</span></div><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="ind-arrow" style="opacity:0;transform:scale(0.5);transition:all .3s;"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg></button>
+        <button class="ind-btn" data-id="4" onclick="setIndustry(4)" style="--accent:#E5B94E;"><div style="display:flex;align-items:center;gap:16px;"><span class="ind-num" style="color:rgba(255,255,255,.2);">05</span><span class="ind-name">Furniture</span></div><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="ind-arrow" style="opacity:0;transform:scale(0.5);transition:all .3s;"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg></button>
+        <button class="ind-btn" data-id="5" onclick="setIndustry(5)" style="--accent:#34D399;"><div style="display:flex;align-items:center;gap:16px;"><span class="ind-num" style="color:rgba(255,255,255,.2);">06</span><span class="ind-name">Jewelry &amp; Accessories</span></div><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="ind-arrow" style="opacity:0;transform:scale(0.5);transition:all .3s;"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg></button>
+        <button class="ind-btn" data-id="6" onclick="setIndustry(6)" style="--accent:#00A8CC;"><div style="display:flex;align-items:center;gap:16px;"><span class="ind-num" style="color:rgba(255,255,255,.2);">07</span><span class="ind-name">Automotive</span></div><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="ind-arrow" style="opacity:0;transform:scale(0.5);transition:all .3s;"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg></button>
+        <button class="ind-btn" data-id="7" onclick="setIndustry(7)" style="--accent:#34D399;"><div style="display:flex;align-items:center;gap:16px;"><span class="ind-num" style="color:rgba(255,255,255,.2);">08</span><span class="ind-name">Batteries &amp; Energy</span></div><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="ind-arrow" style="opacity:0;transform:scale(0.5);transition:all .3s;"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg></button>
+      </div>
+      <div id="industry-detail" style="border-top:1px solid rgba(255,255,255,.08);border-left:1px solid rgba(255,255,255,.08);padding:48px;position:relative;overflow:hidden;transition:opacity .35s;">
+        <div id="detail-num-watermark" style="position:absolute;top:16px;right:24px;font-family:'Cormorant Garamond',serif;font-weight:700;font-size:7rem;color:rgba(255,255,255,.04);line-height:1;user-select:none;pointer-events:none;">01</div>
+        <div id="detail-accent" style="width:48px;height:2px;background:#C084FC;margin-bottom:24px;"></div>
+        <div id="detail-tagline" style="font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:#C084FC;margin-bottom:12px;">Wearing Transparency</div>
+        <h3 id="detail-name" style="font-family:'Cormorant Garamond',serif;font-weight:600;font-size:clamp(2.2rem,4vw,3.2rem);letter-spacing:-.02em;line-height:1;color:#fff;margin-bottom:24px;">Textiles &amp; Fashion</h3>
+        <p id="detail-desc" style="font-family:'Inter',sans-serif;font-weight:300;font-size:17px;line-height:1.75;color:rgba(255,255,255,.5);max-width:480px;margin-bottom:32px;">End-to-end fibre traceability for fashion and technical textiles. Our DPPs capture material composition, dyeing processes, water usage, and certified repair and resale data, supporting Europe's growing circular textile economy.</p>
+        <div id="detail-tags" style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:40px;"><span class="ind-tag" style="border-color:rgba(192,132,252,.19);color:rgba(192,132,252,.56);">Fibre Traceability</span><span class="ind-tag" style="border-color:rgba(192,132,252,.19);color:rgba(192,132,252,.56);">Microplastics</span><span class="ind-tag" style="border-color:rgba(192,132,252,.19);color:rgba(192,132,252,.56);">Circular Fashion</span><span class="ind-tag" style="border-color:rgba(192,132,252,.19);color:rgba(192,132,252,.56);">Care &amp; Repair</span></div>
+        <div id="detail-stat" style="display:inline-flex;align-items:center;gap:20px;border:1px solid rgba(255,255,255,.08);padding:16px 24px;border-radius:2px;"><div id="detail-stat-value" style="font-family:'Cormorant Garamond',serif;font-weight:700;font-size:2.2rem;color:#C084FC;">2025</div><div id="detail-stat-label" style="font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.3);">EU Strategy</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+<style>
+  .ind-btn { width:100%;text-align:left;border-bottom:1px solid rgba(255,255,255,.08);padding:20px 24px;display:flex;align-items:center;justify-content:space-between;background:transparent;position:relative;transition:background .3s;cursor:pointer; }
+  .ind-btn::before { content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:transparent;transition:background .3s; }
+  .ind-btn.active-ind { background:rgba(255,255,255,.04); }
+  .ind-btn.active-ind::before { background:var(--accent); }
+  .ind-btn.active-ind .ind-num { color:var(--accent) !important; }
+  .ind-btn.active-ind .ind-name { color:#fff !important;font-weight:600 !important; }
+  .ind-btn.active-ind .ind-arrow { opacity:1 !important;transform:scale(1) !important;color:var(--accent) !important; }
+  .ind-num { font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.15em;flex-shrink:0; }
+  .ind-name { font-family:'Space Grotesk',sans-serif;font-size:17px;color:rgba(255,255,255,.45);transition:color .3s,font-weight .3s; }
+  .ind-tag { padding:6px 12px;border:1px solid;border-radius:2px;font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase; }
+</style>
+
+<!-- ═══════════════ 5. TEAM ═══════════════ -->
+<section id="team" style="position:relative;overflow:hidden;background-color:#D9D9D9;">
+  <div class="container" style="padding-top:80px;padding-bottom:80px;">
+    <div style="display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:24px;margin-bottom:40px;">
+      <div>
+        <div class="eyebrow"><span class="eyebrow-line eyebrow-line--dark"></span><span class="eyebrow-text eyebrow-text--dark">The Team</span></div>
+        <h2 style="font-family:'Cormorant Garamond',serif;font-weight:300;font-size:clamp(2.2rem,4.5vw,3.8rem);line-height:1.0;letter-spacing:-.02em;color:#0E2640;">The Minds <em style="font-style:italic;font-weight:600;">Behind AKT-ORIGINS</em></h2>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:16px;">
+        <p style="font-family:'Inter',sans-serif;font-weight:300;font-size:15px;line-height:1.7;color:rgba(14,38,64,.5);max-width:280px;text-align:right;">A cross-border team of technologists, legal experts, and product designers united by one belief.</p>
+        <div style="display:flex;align-items:center;gap:8px;">
+          <button id="team-prev" onclick="teamGo(-1)" style="width:36px;height:36px;display:flex;align-items:center;justify-content:center;border:1px solid rgba(14,38,64,.2);border-radius:2px;transition:border-color .3s,background .3s;" onmouseover="this.style.borderColor='#E5B94E';this.style.background='rgba(229,185,78,.1)';" onmouseout="this.style.borderColor='rgba(14,38,64,.2)';this.style.background='transparent';"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#0E2640" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg></button>
+          <button id="team-next" onclick="teamGo(1)" style="width:36px;height:36px;display:flex;align-items:center;justify-content:center;border:1px solid rgba(14,38,64,.2);border-radius:2px;transition:border-color .3s,background .3s;" onmouseover="this.style.borderColor='#E5B94E';this.style.background='rgba(229,185,78,.1)';" onmouseout="this.style.borderColor='rgba(14,38,64,.2)';this.style.background='transparent';"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#0E2640" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></button>
+        </div>
+      </div>
+    </div>
+    <div style="position:relative;overflow:hidden;">
+      <div style="position:absolute;left:0;top:0;bottom:0;width:48px;background:linear-gradient(to right,#D9D9D9,transparent);pointer-events:none;z-index:10;"></div>
+      <div style="position:absolute;right:0;top:0;bottom:0;width:48px;background:linear-gradient(to left,#D9D9D9,transparent);pointer-events:none;z-index:10;"></div>
+      <div id="team-track" style="display:flex;gap:16px;transition:none;"></div>
+    </div>
+    <div style="margin-top:28px;display:flex;flex-direction:column;gap:12px;">
+      <div style="position:relative;height:1px;width:100%;background:rgba(14,38,64,.1);overflow:hidden;"><div id="team-progress" style="position:absolute;top:0;left:0;height:100%;background:#E5B94E;transition:width .5s ease-in-out;width:12.5%;"></div></div>
+      <div style="display:flex;align-items:center;justify-content:space-between;"><div id="team-dots" style="display:flex;align-items:center;gap:6px;"></div><span id="team-count" style="font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.3em;color:rgba(14,38,64,.3);">01 / 08</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ 6. PARTNERS ═══════════════ -->
+<section id="partners" style="position:relative;overflow:hidden;background-color:#0E2640;padding:96px 0 128px;">
+  <div class="fade-left" style="background:linear-gradient(to right,#0E2640 0%,transparent 100%);"></div>
+  <div class="fade-right" style="background:linear-gradient(to left,#0E2640 0%,transparent 100%);"></div>
+  <div class="container" style="margin-bottom:56px;">
+    <div style="display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:24px;">
+      <div>
+        <div class="eyebrow"><span class="eyebrow-line"></span><span class="eyebrow-text eyebrow-text--gold">Partners &amp; Ecosystem</span></div>
+        <h2 style="font-family:'Cormorant Garamond',serif;font-weight:300;font-size:clamp(2.2rem,5vw,4rem);line-height:1.0;letter-spacing:-.02em;color:#fff;">Trusted by the<br/><em style="font-style:italic;font-weight:600;">EU Ecosystem</em></h2>
+      </div>
+      <p style="font-family:'Inter',sans-serif;font-weight:300;font-size:15px;line-height:1.7;color:rgba(255,255,255,.35);max-width:320px;">A growing network of standards bodies, institutions, and industry leaders backing AKT-ORIGINS across the EU27.</p>
+    </div>
+  </div>
+  <div style="overflow:hidden;margin-bottom:16px;"><div style="display:flex;width:max-content;animation:marqueeLeft 28s linear infinite;"><div class="logo-tile">European<br/>Commission</div><div class="logo-tile">GS1</div><div class="logo-tile">SAP</div><div class="logo-tile">TÜV<br/>Rheinland</div><div class="logo-tile">Siemens</div><div class="logo-tile">EIT<br/>Mfg.</div><div class="logo-tile">Bureau<br/>Veritas</div><div class="logo-tile">Bosch</div><div class="logo-tile">European<br/>Commission</div><div class="logo-tile">GS1</div><div class="logo-tile">SAP</div><div class="logo-tile">TÜV<br/>Rheinland</div><div class="logo-tile">Siemens</div><div class="logo-tile">EIT<br/>Mfg.</div><div class="logo-tile">Bureau<br/>Veritas</div><div class="logo-tile">Bosch</div><div class="logo-tile">European<br/>Commission</div><div class="logo-tile">GS1</div><div class="logo-tile">SAP</div><div class="logo-tile">TÜV<br/>Rheinland</div><div class="logo-tile">Siemens</div><div class="logo-tile">EIT<br/>Mfg.</div><div class="logo-tile">Bureau<br/>Veritas</div><div class="logo-tile">Bosch</div></div></div>
+  <div style="overflow:hidden;"><div style="display:flex;width:max-content;animation:marqueeRight 32s linear infinite;"><div class="logo-tile">BASF</div><div class="logo-tile">Stellantis</div><div class="logo-tile">Philips</div><div class="logo-tile">T-Systems</div><div class="logo-tile">DIN</div><div class="logo-tile">Inditex</div><div class="logo-tile">EUIPO</div><div class="logo-tile">Fraunhofer</div><div class="logo-tile">BASF</div><div class="logo-tile">Stellantis</div><div class="logo-tile">Philips</div><div class="logo-tile">T-Systems</div><div class="logo-tile">DIN</div><div class="logo-tile">Inditex</div><div class="logo-tile">EUIPO</div><div class="logo-tile">Fraunhofer</div><div class="logo-tile">BASF</div><div class="logo-tile">Stellantis</div><div class="logo-tile">Philips</div><div class="logo-tile">T-Systems</div><div class="logo-tile">DIN</div><div class="logo-tile">Inditex</div><div class="logo-tile">EUIPO</div><div class="logo-tile">Fraunhofer</div></div></div>
+  <div class="container" style="margin-top:56px;display:flex;align-items:center;gap:16px;"><div style="height:1px;flex:1;background:rgba(255,255,255,.06);"></div><span style="font-family:'Space Mono',monospace;font-size:8px;letter-spacing:.3em;text-transform:uppercase;color:rgba(255,255,255,.2);">+ more joining in 2026</span><div style="height:1px;flex:1;background:rgba(255,255,255,.06);"></div></div>
+</section>
+<style>.logo-tile { display:flex;align-items:center;justify-content:center;flex-shrink:0;width:148px;height:72px;margin:0 20px;border:1px solid rgba(255,255,255,.07);border-radius:3px;background:rgba(255,255,255,.025);font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:13px;letter-spacing:.04em;color:rgba(255,255,255,.3);text-align:center;line-height:1.3;white-space:pre-line; }</style>
+
+<!-- ═══════════════ 7. CONTACT ═══════════════ -->
+<section id="contact" style="position:relative;overflow:hidden;background-color:#0A1E32;">
+  <div class="watermark" style="top:-16px;right:0;color:rgba(255,255,255,.02);">04</div>
+  <div style="position:absolute;inset:0;pointer-events:none;opacity:.02;"><svg width="100%" height="100%"><defs><pattern id="cg" width="70" height="70" patternUnits="userSpaceOnUse"><path d="M 70 0 L 0 0 0 70" fill="none" stroke="white" stroke-width="0.5"/></pattern></defs><rect width="100%" height="100%" fill="url(#cg)"/></svg></div>
+  <div class="container" style="padding-top:112px;padding-bottom:112px;">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:96px;">
+      <div>
+        <div class="eyebrow"><span class="eyebrow-line"></span><span class="eyebrow-text eyebrow-text--gold">Get in Touch</span></div>
+        <h2 style="font-family:'Cormorant Garamond',serif;font-weight:300;font-size:clamp(2.5rem,5.5vw,4.5rem);line-height:1.0;letter-spacing:-.02em;color:#fff;margin-bottom:32px;">Let's Build<br/><em style="font-style:italic;font-weight:600;">Europe's Future</em><br/>Together.</h2>
+        <p style="font-family:'Inter',sans-serif;font-weight:300;font-size:18px;line-height:1.75;color:rgba(255,255,255,.4);max-width:340px;margin-bottom:48px;">Whether you're working through EU DPP compliance or just exploring what product transparency could mean for your business, we're happy to have a conversation.</p>
+        <div style="width:96px;height:96px;border-radius:50%;border:1.5px solid rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;margin-bottom:48px;opacity:.15;">
+          <span style="font-family:'Cormorant Garamond',serif;font-weight:700;font-size:2.5rem;color:#fff;">A</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#E5B94E" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+          <a href="mailto:hello@akt-origins.eu" style="font-family:'Space Mono',monospace;font-size:13px;color:rgba(255,255,255,.5);transition:color .3s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,.5)'">hello@akt-origins.eu</a>
+        </div>
+        <div style="margin-top:40px;border-left:1px solid rgba(255,255,255,.08);padding-left:20px;display:flex;align-items:flex-start;gap:16px;">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.2)" stroke-width="2" style="margin-top:4px;flex-shrink:0;"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+          <div>
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:2px;"><span style="font-size:12px;">🇳🇱</span><span style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:14px;color:#fff;">The Netherlands</span><span style="font-family:'Space Mono',monospace;font-size:8px;letter-spacing:.2em;text-transform:uppercase;color:rgba(229,185,78,.6);">· HQ</span></div>
+            <div style="font-family:'Space Mono',monospace;font-size:10px;color:rgba(255,255,255,.3);">Amsterdam, Netherlands</div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div id="contact-form-wrap">
+          <form id="contact-form" onsubmit="submitForm(event)" style="display:flex;flex-direction:column;gap:24px;">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;">
+              <div><label class="field-label">Full Name</label><input class="field-input" type="text" placeholder="Your full name…" required /></div>
+              <div><label class="field-label">Company</label><input class="field-input" type="text" placeholder="Your company…" /></div>
+            </div>
+            <div><label class="field-label">Email Address</label><input class="field-input" type="email" placeholder="Your email address…" required /></div>
+            <div><label class="field-label">Message</label><textarea class="field-input" rows="6" placeholder="Your message…" style="resize:none;"></textarea></div>
+            <div style="display:flex;align-items:center;gap:4px;opacity:.2;"><span style="color:#E5B94E;font-size:10px;">★</span><span style="color:#E5B94E;font-size:10px;">★</span><span style="color:#E5B94E;font-size:10px;">★</span><span style="color:#E5B94E;font-size:10px;">★</span><span style="color:#E5B94E;font-size:10px;">★</span><span style="color:#E5B94E;font-size:10px;">★</span></div>
+            <button type="submit" class="btn-cta" style="width:100%;justify-content:center;font-size:11px;letter-spacing:.2em;">SEND MESSAGE<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg></button>
+            <p style="font-family:'Space Mono',monospace;font-size:9px;color:rgba(255,255,255,.2);text-align:center;line-height:1.8;">GDPR COMPLIANT · YOUR DATA STAYS IN THE EU · NO THIRD-PARTY SHARING</p>
+          </form>
+        </div>
+        <div id="contact-success" style="display:none;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:80px 0;">
+          <div style="font-family:'Cormorant Garamond',serif;font-weight:300;font-size:3.5rem;color:#E5B94E;margin-bottom:16px;">Thank you.</div>
+          <p style="font-family:'Inter',sans-serif;font-weight:300;font-size:17px;color:rgba(255,255,255,.4);">We'll be in touch within 24 hours.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<style>
+  .field-label { display:block;font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.25em;text-transform:uppercase;color:rgba(255,255,255,.35);margin-bottom:8px; }
+  .field-input { width:100%;background:transparent;border:1px solid rgba(255,255,255,.1);border-radius:2px;color:#fff;font-family:'Inter',sans-serif;font-size:14px;padding:12px 16px;outline:none;transition:border-color .3s; }
+  .field-input::placeholder { color:rgba(255,255,255,.2); }
+  .field-input:focus { border-color:rgba(229,185,78,.6); }
+</style>
+
+<!-- ═══════════════ 8. FOOTER ═══════════════ -->
+<footer style="position:relative;overflow:hidden;background-color:#060F1A;border-top:1px solid rgba(255,255,255,.06);">
+  <div class="lg-only" style="position:absolute;top:32px;right:48px;opacity:.15;width:80px;height:80px;">
+    <span style="position:absolute;left:96%;top:50%;transform:translate(-50%,-50%);font-size:9px;color:#E5B94E;">★</span>
+    <span style="position:absolute;left:88%;top:73%;transform:translate(-50%,-50%);font-size:9px;color:#E5B94E;">★</span>
+    <span style="position:absolute;left:73%;top:88%;transform:translate(-50%,-50%);font-size:9px;color:#E5B94E;">★</span>
+    <span style="position:absolute;left:50%;top:96%;transform:translate(-50%,-50%);font-size:9px;color:#E5B94E;">★</span>
+    <span style="position:absolute;left:27%;top:88%;transform:translate(-50%,-50%);font-size:9px;color:#E5B94E;">★</span>
+    <span style="position:absolute;left:12%;top:73%;transform:translate(-50%,-50%);font-size:9px;color:#E5B94E;">★</span>
+    <span style="position:absolute;left:4%;top:50%;transform:translate(-50%,-50%);font-size:9px;color:#E5B94E;">★</span>
+    <span style="position:absolute;left:12%;top:27%;transform:translate(-50%,-50%);font-size:9px;color:#E5B94E;">★</span>
+    <span style="position:absolute;left:27%;top:12%;transform:translate(-50%,-50%);font-size:9px;color:#E5B94E;">★</span>
+    <span style="position:absolute;left:50%;top:4%;transform:translate(-50%,-50%);font-size:9px;color:#E5B94E;">★</span>
+    <span style="position:absolute;left:73%;top:12%;transform:translate(-50%,-50%);font-size:9px;color:#E5B94E;">★</span>
+    <span style="position:absolute;left:88%;top:27%;transform:translate(-50%,-50%);font-size:9px;color:#E5B94E;">★</span>
+  </div>
+  <div class="container" style="padding-top:64px;padding-bottom:64px;">
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:48px;margin-bottom:64px;">
+      <div>
+        <button onclick="window.scrollTo({top:0,behavior:'smooth'})" style="display:flex;align-items:center;gap:12px;margin-bottom:20px;">
+          <div style="width:40px;height:40px;border-radius:50%;border:1.5px solid rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;opacity:.8;"><span style="font-family:'Cormorant Garamond',serif;font-weight:700;font-size:1.1rem;color:#fff;">A</span></div>
+          <div style="line-height:1;"><div style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:15px;letter-spacing:.3em;text-transform:uppercase;color:#fff;">AKT-ORIGINS</div><div style="font-family:'Space Mono',monospace;font-size:8px;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.25);">Digital Product Passport</div></div>
+        </button>
+        <p style="font-family:'Inter',sans-serif;font-weight:300;font-size:13px;line-height:1.7;color:rgba(255,255,255,.25);max-width:280px;">Building the digital identity infrastructure for European manufacturing. Compliant, transparent, and proudly Made in EU.</p>
+      </div>
+      <div>
+        <div style="font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.35em;text-transform:uppercase;color:rgba(255,255,255,.2);margin-bottom:24px;">Navigation</div>
+        <ul style="display:flex;flex-direction:column;gap:12px;">
+          <li><button onclick="scrollTo('#about')" class="footer-link">About</button></li>
+          <li><button onclick="scrollTo('#industries')" class="footer-link">Industries</button></li>
+          <li><button onclick="scrollTo('#team')" class="footer-link">Team</button></li>
+          <li><button onclick="scrollTo('#partners')" class="footer-link">Partners</button></li>
+          <li><button onclick="scrollTo('#contact')" class="footer-link">Contact</button></li>
+        </ul>
+      </div>
+      <div>
+        <div style="font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.35em;text-transform:uppercase;color:rgba(255,255,255,.2);margin-bottom:24px;">Our Commitment</div>
+        <div style="display:inline-flex;align-items:center;gap:12px;border:1px solid rgba(229,185,78,.2);padding:12px 20px;border-radius:2px;margin-bottom:16px;"><div style="display:flex;gap:2px;"><span style="color:#E5B94E;font-size:9px;">★</span><span style="color:#E5B94E;font-size:9px;">★</span><span style="color:#E5B94E;font-size:9px;">★</span><span style="color:#E5B94E;font-size:9px;">★</span><span style="color:#E5B94E;font-size:9px;">★</span><span style="color:#E5B94E;font-size:9px;">★</span></div><span style="font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.25em;text-transform:uppercase;color:rgba(229,185,78,.7);">Made in EU</span></div>
+        <div style="font-family:'Space Mono',monospace;font-size:9px;line-height:1.8;color:rgba(255,255,255,.2);">GDPR COMPLIANT<br/>EU DATA SOVEREIGNTY<br/>ESPR REGULATION READY</div>
+      </div>
+    </div>
+    <div style="padding-top:32px;border-top:1px solid rgba(255,255,255,.06);display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:16px;">
+      <div style="font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.1em;color:rgba(255,255,255,.15);">© 2026 AKT-ORIGINS. ALL RIGHTS RESERVED.</div>
+      <div style="display:flex;gap:24px;"><button class="footer-legal">PRIVACY POLICY</button><button class="footer-legal">TERMS OF SERVICE</button><button class="footer-legal">COOKIE SETTINGS</button></div>
+    </div>
+  </div>
+</footer>
+<style>
+  .footer-link { font-family:'Space Grotesk',sans-serif;font-size:14px;color:rgba(255,255,255,.35);transition:color .3s; }
+  .footer-link:hover { color:#fff; }
+  .footer-legal { font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.1em;color:rgba(255,255,255,.15);transition:color .3s; }
+  .footer-legal:hover { color:rgba(255,255,255,.4); }
+</style>
+
+<!-- ═══════════════ JAVASCRIPT ═══════════════ -->
+<script>
+function scrollTo(selector) {
+  const el = document.querySelector(selector);
+  if (el) el.scrollIntoView({ behavior: 'smooth' });
+}
+
+window.addEventListener('scroll', () => {
+  const nav = document.getElementById('navbar');
+  if (window.scrollY > 60) {
+    nav.style.backgroundColor = 'rgba(14,38,64,0.96)';
+    nav.style.backdropFilter = 'blur(16px)';
+    nav.style.borderColor = 'rgba(255,255,255,0.06)';
+  } else {
+    nav.style.backgroundColor = 'transparent';
+    nav.style.backdropFilter = 'none';
+    nav.style.borderColor = 'transparent';
+  }
+});
+
+function toggleMenu() {
+  const menu = document.getElementById('mobile-menu');
+  const iconMenu = document.getElementById('icon-menu');
+  const iconClose = document.getElementById('icon-close');
+  const isOpen = menu.style.display === 'block';
+  menu.style.display = isOpen ? 'none' : 'block';
+  iconMenu.style.display = isOpen ? 'block' : 'none';
+  iconClose.style.display = isOpen ? 'none' : 'block';
+}
+
+const INDUSTRIES = [
+  { id:0, num:'01', name:'Textiles &amp; Fashion', tagline:'Wearing Transparency', desc:'End-to-end fibre traceability for fashion and technical textiles. Our DPPs capture material composition, dyeing processes, water usage, and certified repair and resale data, supporting Europe\'s growing circular textile economy.', tags:['Fibre Traceability','Microplastics','Circular Fashion','Care &amp; Repair'], stat:{value:'2025',label:'EU Strategy'}, accent:'#C084FC' },
+  { id:1, num:'02', name:'Electronics', tagline:'Traceability at Silicon Level', desc:'Component-level traceability for semiconductors, consumer electronics, and industrial hardware. DPPs that show where materials come from, how efficient the product is, and how it can be responsibly recycled.', tags:['Semiconductors','Conflict Minerals','Energy Label','WEEE Compliance'], stat:{value:'94%',label:'Recycl. Rate'}, accent:'#00A8CC' },
+  { id:2, num:'03', name:'Construction', tagline:'Building with Full Transparency', desc:'Digital Product Passports for construction materials, structural components, and building systems. We track embodied carbon, material sourcing, structural certifications, and end-of-life deconstruction data.', tags:['Embodied Carbon','CPR Compliance','Material Sourcing','Deconstruction'], stat:{value:'CPR',label:'Compliant'}, accent:'#FB923C' },
+  { id:3, num:'04', name:'Chemicals &amp; Materials', tagline:'Safe Substances, Clear Data', desc:'REACH-aligned DPPs for chemical substances, adhesives, and advanced materials. We cover real-time SVHC tracking, safety data sheets, and end-of-life treatment instructions.', tags:['REACH Compliance','SVHC Tracking','Adhesives','SDS Integration'], stat:{value:'REACH',label:'Compliant'}, accent:'#F472B6' },
+  { id:4, num:'05', name:'Furniture', tagline:'From Forest to Living Room', desc:'Digital passports for furniture and interior products, covering wood sourcing certifications, foam and fabric compositions, surface treatment chemicals, and repairability scores.', tags:['Wood Sourcing','Ecodesign','Repairability','Circular Design'], stat:{value:'ESPR',label:'Ready'}, accent:'#E5B94E' },
+  { id:5, num:'06', name:'Jewelry &amp; Accessories', tagline:'Precious Provenance, Verified', desc:'Provenance and authenticity passports for jewelry, watches, and fashion accessories. Our DPPs certify precious metal origins, gemstone sourcing, hallmarking compliance, and anti-counterfeiting data.', tags:['Metal Origins','Gemstone Traceability','Hallmarking','Anti-Counterfeit'], stat:{value:'EU27',label:'Market Trust'}, accent:'#34D399' },
+  { id:6, num:'07', name:'Automotive', tagline:'From Chassis to Certificate', desc:'Full lifecycle DPPs for vehicles, EV batteries, and components. Our passports track material origins, emissions data, and repairability scores, covering both EU Battery Regulation and ESPR requirements.', tags:['EV Batteries','EU Battery Reg','Supply Chain','Repairability'], stat:{value:'2026',label:'Mandate Year'}, accent:'#00A8CC' },
+  { id:7, num:'08', name:'Batteries &amp; Energy', tagline:'Powering the Green Transition', desc:'Specialised DPP infrastructure for battery cells, packs, and energy storage systems. Carbon footprint per kWh, state-of-health monitoring, and second-life certification in one verifiable passport.', tags:['SoH Monitoring','Carbon Intensity','Second Life','Grid Storage'], stat:{value:'2027',label:'Full Mandate'}, accent:'#34D399' },
+];
+
+function setIndustry(id) {
+  const ind = INDUSTRIES[id];
+  document.querySelectorAll('.ind-btn').forEach(btn => {
+    btn.classList.remove('active-ind');
+    btn.querySelector('.ind-num').style.color = 'rgba(255,255,255,.2)';
+    btn.querySelector('.ind-name').style.color = 'rgba(255,255,255,.45)';
+    btn.querySelector('.ind-name').style.fontWeight = '400';
+    const arrow = btn.querySelector('.ind-arrow');
+    arrow.style.opacity = '0'; arrow.style.transform = 'scale(0.5)';
+  });
+  const activeBtn = document.querySelector(`.ind-btn[data-id="${id}"]`);
+  activeBtn.classList.add('active-ind');
+  activeBtn.querySelector('.ind-num').style.color = ind.accent;
+  activeBtn.querySelector('.ind-name').style.color = '#fff';
+  activeBtn.querySelector('.ind-name').style.fontWeight = '600';
+  const activeArrow = activeBtn.querySelector('.ind-arrow');
+  activeArrow.style.opacity = '1'; activeArrow.style.transform = 'scale(1)';
+  activeArrow.style.color = ind.accent;
+  const detail = document.getElementById('industry-detail');
+  detail.style.opacity = '0';
+  setTimeout(() => {
+    document.getElementById('detail-num-watermark').textContent = ind.num;
+    document.getElementById('detail-accent').style.background = ind.accent;
+    document.getElementById('detail-tagline').textContent = ind.tagline;
+    document.getElementById('detail-tagline').style.color = ind.accent;
+    document.getElementById('detail-name').innerHTML = ind.name;
+    document.getElementById('detail-desc').textContent = ind.desc;
+    document.getElementById('detail-stat-value').textContent = ind.stat.value;
+    document.getElementById('detail-stat-value').style.color = ind.accent;
+    document.getElementById('detail-stat-label').textContent = ind.stat.label;
+    const tagContainer = document.getElementById('detail-tags');
+    tagContainer.innerHTML = '';
+    ind.tags.forEach(tag => {
+      const span = document.createElement('span');
+      span.className = 'ind-tag';
+      span.innerHTML = tag;
+      span.style.borderColor = ind.accent + '30';
+      span.style.color = ind.accent + '90';
+      tagContainer.appendChild(span);
+    });
+    detail.style.opacity = '1';
+  }, 175);
+}
+
+document.querySelectorAll('.ind-btn').forEach(btn => {
+  btn.addEventListener('mouseenter', () => setIndustry(+btn.dataset.id));
+});
+
+const TEAM = [
+  { name:'Krishna Bhawanidin', role:'CEO & Founder', quote:'We\'re building something European manufacturing genuinely needs: a way to make products traceable, compliant, and ready for the future.', initials:'KB' },
+  { name:'Angela Tudor', role:'COO & Co-Founder', quote:'Good operations are what turn ideas into something real. Every passport we issue is a commitment to the people who trust us.', initials:'AT' },
+  { name:'Alekh Johari', role:'CPO & Founding Member', quote:'Product is where regulation becomes real. My job is to make sure our platform isn\'t just compliant, but actually good to work with.', initials:'AJ' },
+  { name:'Angel Tsang', role:'Legal Advisor', quote:'EU regulation is complex and it moves fast. I help AKT-ORIGINS stay ahead of it, and find the opportunities within it.', initials:'AN' },
+  { name:'Victoria M. Gimigliano', role:'Director Strategic Growth & BD', quote:'In this space, trust is everything. Every partnership we build is another step toward making product transparency the norm in Europe.', initials:'VG' },
+  { name:'Ganapathy Chinnadurai', role:'SRE & Digital Operations', quote:'When passports are governing real supply chains, the infrastructure behind them has to be rock solid. That\'s what I make sure of.', initials:'GC' },
+  { name:'Erinrose Sullivan', role:'Advisor', quote:'Getting DPPs right takes people who understand both policy and industry. That\'s the space I work in.', initials:'ES' },
+  { name:'Antonia Loncar', role:'Funding Advisor', quote:'The companies worth backing are the ones solving problems that actually matter. AKT-ORIGINS is doing exactly that.', initials:'AL' },
+];
+
+let teamActive = 0;
+let teamPaused = false;
+let teamInterval;
+const VISIBLE = 4;
+const INTERVAL = 3200;
+
+function renderTeam() {
+  const track = document.getElementById('team-track');
+  track.innerHTML = '';
+  const ordered = Array.from({ length: TEAM.length }, (_, i) => TEAM[(teamActive + i) % TEAM.length]);
+  const visible = ordered.slice(0, VISIBLE);
+  visible.forEach((member, i) => {
+    const isFeatured = i === 1;
+    const card = document.createElement('div');
+    card.style.cssText = `flex-shrink:0;width:${isFeatured ? '30%' : 'calc((70% - 48px) / 3)'};height:340px;border-radius:2px;background:${isFeatured ? '#0E2640' : 'linear-gradient(150deg,rgba(14,38,64,.18) 0%,rgba(14,38,64,.08) 45%,#ffffff 100%)'};border:${isFeatured ? 'none' : '1px solid rgba(14,38,64,.12)'};position:relative;overflow:hidden;`;
+    const memberIndex = TEAM.indexOf(member) + 1;
+    card.innerHTML = `
+      <div style="position:absolute;top:0;left:0;width:100%;height:2px;background:${isFeatured ? 'linear-gradient(to right,#E5B94E,transparent)' : '#E5B94E'};opacity:${isFeatured ? 1 : 0.6};"></div>
+      ${isFeatured ? `
+        <div style="position:absolute;bottom:-16px;right:-16px;font-family:'Cormorant Garamond',serif;font-weight:700;font-size:9rem;color:rgba(255,255,255,.04);line-height:1;user-select:none;pointer-events:none;">${member.initials}</div>
+        <div style="padding:32px;height:100%;display:flex;flex-direction:column;justify-content:space-between;position:relative;">
+          <div>
+            <div style="display:inline-block;padding:4px 12px;background:rgba(229,185,78,.12);border-radius:2px;margin-bottom:20px;"><span style="font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:#E5B94E;">${member.role}</span></div>
+            <h3 style="font-family:'Cormorant Garamond',serif;font-weight:300;font-size:1.9rem;letter-spacing:-.02em;line-height:1.1;color:#fff;margin-bottom:4px;">${member.name}</h3>
+            <div style="font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.1em;color:rgba(255,255,255,.25);">AKT-ORIGINS</div>
+          </div>
+          <div>
+            <div style="width:24px;height:1px;background:#E5B94E;margin-bottom:12px;"></div>
+            <p style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.08rem;line-height:1.6;color:rgba(255,255,255,.55);">&ldquo;${member.quote}&rdquo;</p>
+          </div>
+        </div>
+      ` : `
+        <div style="padding:24px;height:100%;display:flex;flex-direction:column;justify-content:space-between;position:relative;">
+          <div>
+            <div style="width:40px;height:40px;border-radius:50%;background:rgba(14,38,64,.08);border:1px solid rgba(14,38,64,.12);display:flex;align-items:center;justify-content:center;margin-bottom:20px;"><span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:13px;color:#0E2640;">${member.initials}</span></div>
+            <div style="font-family:'Space Mono',monospace;font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;color:rgba(14,38,64,.4);margin-bottom:4px;">${member.role}</div>
+            <h4 style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:17px;color:#0E2640;line-height:1.2;margin-bottom:4px;">${member.name}</h4>
+            <div style="font-family:'Space Mono',monospace;font-size:9px;color:rgba(14,38,64,.28);">AKT-ORIGINS</div>
+          </div>
+          <div>
+            <div style="width:18px;height:1px;background:#E5B94E;margin-bottom:12px;"></div>
+            <p style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:14px;line-height:1.6;color:rgba(14,38,64,.55);">&ldquo;${member.quote}&rdquo;</p>
+          </div>
+        </div>
+        <div style="position:absolute;bottom:16px;right:20px;font-family:'Space Mono',monospace;font-size:9px;color:rgba(14,38,64,.13);letter-spacing:.1em;user-select:none;">${String(memberIndex).padStart(2,'0')}</div>
+      `}
+    `;
+    track.appendChild(card);
+  });
+  document.getElementById('team-progress').style.width = `${((teamActive + 1) / TEAM.length) * 100}%`;
+  const dots = document.getElementById('team-dots');
+  dots.innerHTML = '';
+  TEAM.forEach((_, i) => {
+    const dot = document.createElement('button');
+    dot.onclick = () => { teamActive = i; teamPaused = true; renderTeam(); };
+    dot.style.cssText = `width:${i === teamActive ? '20px' : '6px'};height:6px;border-radius:3px;background:${i === teamActive ? '#E5B94E' : 'rgba(14,38,64,.2)'};border:none;cursor:pointer;transition:all .3s;`;
+    dots.appendChild(dot);
+  });
+  document.getElementById('team-count').textContent = `${String(teamActive + 1).padStart(2,'0')} / ${String(TEAM.length).padStart(2,'0')}`;
+}
+
+function teamGo(dir) {
+  teamActive = (teamActive + dir + TEAM.length) % TEAM.length;
+  renderTeam();
+}
+
+function startTeamAuto() {
+  teamInterval = setInterval(() => {
+    if (!teamPaused) { teamActive = (teamActive + 1) % TEAM.length; renderTeam(); }
+  }, INTERVAL);
+}
+
+document.getElementById('team').addEventListener('mouseenter', () => teamPaused = true);
+document.getElementById('team').addEventListener('mouseleave', () => teamPaused = false);
+renderTeam();
+startTeamAuto();
+
+function submitForm(e) {
+  e.preventDefault();
+  document.getElementById('contact-form-wrap').style.display = 'none';
+  const success = document.getElementById('contact-success');
+  success.style.display = 'flex';
+}
+</script>
+</body>
+</html>
